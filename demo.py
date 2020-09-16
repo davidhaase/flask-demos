@@ -85,12 +85,9 @@ class User(db.Model):
 #  - in the form, each represented by an object. Each field object can have
 #  - one or more validators attached. A validator is a function that checks
 #  - whether the data submitted by the user is valid.
-class SourceTxtForm(FlaskForm):
-    source_txt = StringField('Enter text in English', validators=[DataRequired()])
+class NameForm(FlaskForm):
+    name = StringField('What is your name?', validators=[DataRequired()])
     submit = SubmitField('Submit')
-
-class LangSelectionForm(FlaskForm):
-    target_lang = SelectField(['English', 'French'], validators=[DataRequired()])
 
 # END FORM CLASSES
 #########
@@ -113,7 +110,7 @@ def internal_server_error(e):
 # ROUTES -- now define a route for each page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    form = SourceTxtForm()
+    form = NameForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.name.data).first()
         if user is None:
@@ -124,20 +121,13 @@ def index():
         else:
             session['known'] = True
 
-
-
-        # Quick session-based persistence used for Flash messages at top of page
-        # previous_txt = session.get('source_txt')
-        # if previous_txt == form.source_txt.data:
-        #     flash('Looks like you entered the same text!')
-
         #  Add a session variable and redirect to avoid
         #  the ugly repost warning from the browser
-        session['source_txt'] = form.source_txt.data
+        session['name'] = form.name.data
 
         return redirect(url_for('index'))
     return render_template('index.html', form=form,
-                            source_txt=session.get('source_txt'),
+                            name=session.get('name'),
                             current_time=datetime.utcnow())
 
 
