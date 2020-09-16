@@ -15,12 +15,13 @@
     <h1>Glossa Machine Translations</h1>
     <p>Page last refreshed: {{ moment(current_time).format('LLLL') }}
       ({{ moment(current_time).fromNow(refresh=True) }}).</p>
-    <!-- <p> ({{ moment(current_time).fromNow(refresh=True) }}).</p> -->
+    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+    {% if not known %}
+    <p>Pleased to meet you!</p>
+    {% else %}
+    <p>Happy to see you again!</p>
+    {% endif %}
 
-    {{ wtf.quick_form(form) }}
-
-    <hr/>
-    <p>You entered: </p>
-    <p>{% if source_txt %}{{ source_txt }}{% else %}--no source text entered--{% endif %}</p>
 </div>
+{{ wtf.quick_form(form) }}
 {% endblock %}
